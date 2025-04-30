@@ -49,3 +49,12 @@ h1 {
   font-size: 24px;
   transform: scale(1.1);
 }
+
+.delete-button {
+  background-color: #fff;
+  border: none;
+  color: #9a4199;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 10px;
+}

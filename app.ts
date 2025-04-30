@@ -9,11 +9,14 @@ taskForm.addEventListener("submit", (event) => {
   if (taskText !== "") {
     //cria um novo li
     const taskItem = document.createElement("li");
+    taskItem.classList.add("task-item");
 
     //cria um checkbox
     const checkbox = document.createElement("input");
     checkbox.classList.add("checkbox");
     checkbox.type = "checkbox";
+    checkbox.id = "checkbox";
+    checkbox.name = "checkbox";
     checkbox.addEventListener("change", () => {
       if (checkbox.checked) {
         taskItem.style.textDecoration = "line-through";
@@ -30,7 +33,7 @@ taskForm.addEventListener("submit", (event) => {
     //cria um botão de remover
     const deleteButton = document.createElement("button");
     deleteButton.classList.add("delete-button");
-    document.createElement("i");
+    deleteButton.type = "button";
     const icon = document.createElement("i");
     icon.classList.add("fa-solid", "fa-trash");
     deleteButton.appendChild(icon);
