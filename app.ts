@@ -12,6 +12,7 @@ taskForm.addEventListener("submit", (event) => {
 
     //cria um checkbox
     const checkbox = document.createElement("input");
+    checkbox.classList.add("checkbox"); // adiciona a classe checkbox ao checkbox
     checkbox.type = "checkbox";
     checkbox.addEventListener("change", () => {
       if (checkbox.checked) {
@@ -23,10 +24,12 @@ taskForm.addEventListener("submit", (event) => {
 
     //cria um span para o texto da tarefa
     const span = document.createElement("span");
+    span.classList.add("task-text"); // adiciona a classe task-text ao span
     span.textContent = taskText; // adiciona o texto da tarefa ao span
 
     //cria um botão de remover
     const deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete-button"); // adiciona a classe delete-button ao botão
     deleteButton.textContent = "Remover"; // adiciona o texto do botão
     deleteButton.addEventListener("click", () => {
       taskList.removeChild(taskItem); // remove a tarefa da lista
@@ -44,5 +47,3 @@ taskForm.addEventListener("submit", (event) => {
     taskInput.value = ""; // limpa o input
   }
 });
-
-export {}; // exporta um objeto vazio para evitar erros de importação, já que o arquivo não tem exportações
