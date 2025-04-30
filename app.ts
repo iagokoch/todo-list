@@ -12,38 +12,41 @@ taskForm.addEventListener("submit", (event) => {
 
     //cria um checkbox
     const checkbox = document.createElement("input");
-    checkbox.classList.add("checkbox"); // adiciona a classe checkbox ao checkbox
+    checkbox.classList.add("checkbox");
     checkbox.type = "checkbox";
     checkbox.addEventListener("change", () => {
       if (checkbox.checked) {
-        taskItem.style.textDecoration = "line-through"; // adiciona o risco na tarefa
+        taskItem.style.textDecoration = "line-through";
       } else {
-        taskItem.style.textDecoration = "none"; // remove o risco na tarefa
+        taskItem.style.textDecoration = "none";
       }
     });
 
     //cria um span para o texto da tarefa
     const span = document.createElement("span");
-    span.classList.add("task-text"); // adiciona a classe task-text ao span
-    span.textContent = taskText; // adiciona o texto da tarefa ao span
+    span.classList.add("task-text");
+    span.textContent = taskText;
 
     //cria um botão de remover
     const deleteButton = document.createElement("button");
-    deleteButton.classList.add("delete-button"); // adiciona a classe delete-button ao botão
-    deleteButton.textContent = "Remover"; // adiciona o texto do botão
+    deleteButton.classList.add("delete-button");
+    document.createElement("i");
+    const icon = document.createElement("i");
+    icon.classList.add("fa-solid", "fa-trash");
+    deleteButton.appendChild(icon);
     deleteButton.addEventListener("click", () => {
-      taskList.removeChild(taskItem); // remove a tarefa da lista
+      taskList.removeChild(taskItem);
     });
 
     //adiciona o checkbox, o span e o botão de remover ao li
-    taskItem.appendChild(checkbox); // adiciona o checkbox ao li
-    taskItem.appendChild(span); // adiciona o span ao li
-    taskItem.appendChild(deleteButton); // adiciona o botão de remover ao li
+    taskItem.appendChild(checkbox);
+    taskItem.appendChild(span);
+    taskItem.appendChild(deleteButton);
 
     //adiciona o li à lista de tarefas
-    taskList.appendChild(taskItem); // adiciona o li à lista de tarefas
+    taskList.appendChild(taskItem);
 
     //limpa o input
-    taskInput.value = ""; // limpa o input
+    taskInput.value = "";
   }
 });
