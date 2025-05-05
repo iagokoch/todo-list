@@ -1,0 +1,24 @@
+{
+  "name": "todo-list-frontend",
+  "version": "1.0.0",
+  "description": "Frontend do meu primeiro projeto web com TypeScript",
+  "homepage": "https://github.com/iagokoch/todo-list#readme",
+  "bugs": {
+    "url": "https://github.com/iagokoch/todo-list/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iagokoch/todo-list.git"
+  },
+  "license": "ISC",
+  "author": "iago koch",
+  "scripts": {
+    "start": "tsc && live-server",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "typescript": "^5.0.0"
+  }
+}
