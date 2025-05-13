@@ -4,5 +4,8 @@
     "plaintext": false,
     "markdown": false,
     "scminput": false
-  }
+  },
+  "css.validate": true,
+  "css.completion.triggerPropertyValueCompletion": true,
+  "css.completion.completePropertyWithSemicolon": true
 }
