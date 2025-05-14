@@ -1,6 +1,5 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import authRoutes from "./routes/authRoutes";
 
 // Cria uma instância da aplicação Express
 const app = express();
@@ -10,7 +9,6 @@ const prisma = new PrismaClient();
 app.use(express.json());
 
 // Rotas de autenticação
-app.use("/auth", authRoutes);
 
 // Define a porta em que o servidor vai rodar
 // Você pode usar uma variável de ambiente ou um valor fixo
