@@ -14,9 +14,11 @@ app.use(express.json());
 // Você pode usar uma variável de ambiente ou um valor fixo
 const PORT = process.env.PORT || 3000;
 
-// Uma rota de exemplo para testar
-app.get("/", (req, res) => {
-  res.send("Olá do backend da TODO list!");
+app.post("/tarefas", async (req, res) => {
+  const { titulo, descricao } = req.body;
+  const novaTarefa = await prisma.task.create({
+    data: { title: "string", description: "string?" },
+  });
 });
 
 // Inicia o servidor para escutar na porta definida
