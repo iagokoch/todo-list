@@ -33,4 +33,21 @@ tarefas.post("/", async (req: Request, res: Response) => {
   }
 });
 
+tarefas.get("/", async (req: Request, res: Response) => {
+  try {
+    const tarefas = await prisma.task.findMany();
+    res.status(200).json({
+      message: "Tarefas encontradas com sucesso",
+      tarefas: tarefas,
+    });
+  } catch (error) {
+    console.error("Erro ao buscar as tarefas", error);
+    res.status(500).json({
+      error: "Erro ao buscar as tarefas",
+    });
+  } finally {
+    await prisma.$disconnect();
+  }
+});
+
 export { tarefas };
