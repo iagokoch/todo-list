@@ -1,5 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import { tarefas } from "./routes/tarefas";
 
 // Cria uma instância da aplicação Express
 const app = express();
