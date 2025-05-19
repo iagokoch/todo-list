@@ -9,18 +9,13 @@ const prisma = new PrismaClient();
 // Middleware para processar JSON
 app.use(express.json());
 
+app.use("/tarefas", tarefas);
+
 // Rotas de autenticação
 
 // Define a porta em que o servidor vai rodar
 // Você pode usar uma variável de ambiente ou um valor fixo
 const PORT = process.env.PORT || 3000;
-
-app.post("/tarefas", async (req, res) => {
-  const { titulo, descricao } = req.body;
-  const novaTarefa = await prisma.task.create({
-    data: { title: "string", description: "string?" },
-  });
-});
 
 // Inicia o servidor para escutar na porta definida
 app.listen(PORT, () => {
