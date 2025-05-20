@@ -2,6 +2,27 @@ const taskInput = document.getElementById("taskInput") as HTMLInputElement; // p
 const taskList = document.getElementById("taskList") as HTMLUListElement;
 const taskForm = document.getElementById("taskForm") as HTMLFormElement;
 
+carregarTarefas();
+function carregarTarefas() {
+  fetch("http://localhost:3009/tarefas", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json(){
+    .then((data) => {
+      data.foreach((task) =>{
+        
+      })
+    })
+      
+    })
+
+  }
+)}
+
+
 taskForm.addEventListener("submit", (event) => {
   event.preventDefault(); // evita o recarregamento automatico da página ao enviar o formulário
 
