@@ -15,7 +15,7 @@ app.use("/tarefas", tarefas);
 
 // Define a porta em que o servidor vai rodar
 // Você pode usar uma variável de ambiente ou um valor fixo
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3009;
 
 // Inicia o servidor para escutar na porta definida
 app.listen(PORT, () => {

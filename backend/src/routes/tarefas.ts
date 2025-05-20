@@ -10,11 +10,11 @@ tarefas.get("/", (req: Request, res: Response) => {
 });
 
 tarefas.post("/", async (req: Request, res: Response) => {
-  const { description } = req.body;
+  const { title, description } = req.body;
   try {
     const novaTrarefa = await prisma.task.create({
       data: {
-        title: "string",
+        title: title,
         description: description,
         completed: false,
       },

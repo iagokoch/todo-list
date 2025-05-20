@@ -51,5 +51,37 @@ taskForm.addEventListener("submit", (event) => {
 
     //limpa o input
     taskInput.value = "";
+
+    fetch("http://localhost:3009/tarefas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: taskText,
+        description: "",
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Tarefa criada com sucesso:", data);
+      })
+      .catch((error) => {
+        console.error("Erro ao criar a tarefa:", error);
+      });
+
+    fetch("http://localhost:3009/tarefas", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Tarefa(s) encontradas com sucesso", data);
+      })
+      .catch((error) => {
+        console.error("Erro ai buscar tarefas", error);
+      });
   }
 });
