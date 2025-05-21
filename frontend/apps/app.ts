@@ -10,18 +10,26 @@ function carregarTarefas() {
       "Content-Type": "application/json",
     },
   })
-    .then((response) => response.json(){
+    .then((response) => response.json())
     .then((data) => {
-      data.foreach((task) =>{
-        
-      })
-    })
-      
-    })
-
-  }
-)}
-
+      data.forEach((task) => {
+        const taskItem = document.createElement("li");
+        taskItem.classList.add("task-item");
+        const checkbox = document.createElement("input");
+        checkbox.classList.add("checkbox");
+        checkbox.type = "checkbox";
+        checkbox.id = "checkbox";
+        checkbox.name = "checkbox";
+        checkbox.checked = task.completed; // Define o estado do checkbox com base na tarefa
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) {
+            taskItem.style.textDecoration = "line-through";
+            fetch();
+          }
+        });
+      });
+    });
+}
 
 taskForm.addEventListener("submit", (event) => {
   event.preventDefault(); // evita o recarregamento automatico da página ao enviar o formulário
@@ -89,20 +97,6 @@ taskForm.addEventListener("submit", (event) => {
       })
       .catch((error) => {
         console.error("Erro ao criar a tarefa:", error);
-      });
-
-    fetch("http://localhost:3009/tarefas", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Tarefa(s) encontradas com sucesso", data);
-      })
-      .catch((error) => {
-        console.error("Erro ai buscar tarefas", error);
       });
   }
 });
