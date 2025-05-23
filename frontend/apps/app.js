@@ -13,7 +13,7 @@ function carregarTarefas() {
     })
         .then((response) => response.json())
         .then((data) => {
-        data.forEach((task) => {
+        data.tarefas.forEach((task) => {
             const taskItem = document.createElement("li");
             taskItem.classList.add("task-item");
             const checkbox = document.createElement("input");
@@ -21,47 +21,75 @@ function carregarTarefas() {
             checkbox.type = "checkbox";
             checkbox.id = "checkbox";
             checkbox.name = "checkbox";
-            checkbox.checked = task.completed; // Define o estado do checkbox com base na tarefa
+            checkbox.checked = task.completed;
+            const span = document.createElement("span");
+            span.classList.add("task-text");
+            span.textContent = task.title;
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("delete-button");
+            deleteButton.type = "button";
+            const icon = document.createElement("i");
+            icon.classList.add("fa-solid", "fa-trash");
+            deleteButton.appendChild(icon);
+            deleteButton.addEventListener("click", () => {
+                fetch(`http://localhost:3009/tarefas/${task.id}`, {
+                    method: "DELETE",
+                }).then(() => {
+                    taskList.removeChild(taskItem);
+                });
+            });
             checkbox.addEventListener("change", () => {
                 if (checkbox.checked) {
                     taskItem.style.textDecoration = "line-through";
-                    fetch(`http://localhost:3009/tarefas/${task.id}`),
-                        {
-                            method: "PATCH",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                completed: true,
-                            }),
-                        };
+                    fetch(`http://localhost:3009/tarefas/${task.id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            completed: true,
+                        }),
+                    });
                 }
                 else {
                     taskItem.style.textDecoration = "none";
+                    fetch(`http://localhost:3009/tarefas/${task.id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            completed: false,
+                        }),
+                    });
                 }
             });
+            taskItem.appendChild(checkbox);
+            taskItem.appendChild(span);
+            taskItem.appendChild(deleteButton);
+            taskList.appendChild(taskItem);
         });
     });
 }
 taskForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // evita o recarregamento automatico da página ao enviar o formulário
-    const taskText = taskInput.value.trim(); // remove espaços em branco do começo e do final da string
-    fetch("http://localhost:3009/tarefas", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            title: taskText,
-            description: "",
-        }),
-    })
-        .then((response) => response.json())
-        .then((data) => {
-        console.log("Tarefa criada com sucesso:", data);
-        carregarTarefas();
-    })
-        .catch((error) => {
-        console.error("Erro ao criar a tarefa:", error);
-    });
+    event.preventDefault();
+    const taskText = taskInput.value.trim();
+    if (taskText !== "") {
+        fetch("http://localhost:3009/tarefas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                title: taskText,
+                description: "",
+                completed: false,
+            }),
+        })
+            .then((response) => response.json())
+            .then(() => {
+            taskInput.value = "";
+            carregarTarefas();
+        });
+    }
 });

@@ -44,4 +44,49 @@ tarefas.get("/", async (req: Request, res: Response) => {
   }
 });
 
+tarefas.patch("/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { completed } = req.body;
+
+  try {
+    const tarefaAtualizada = await prisma.task.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        completed: completed,
+      },
+    });
+    res.status(200).json({
+      message: "Tarefa atualizada com sucesso",
+      tarefa: tarefaAtualizada,
+    });
+  } catch (error) {
+    console.error("Erro ao atualizar tarefa:", error);
+    res.status(500).json({
+      error: "Erro ao atualizar tarefa",
+    });
+  }
+});
+
+tarefas.delete("/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.task.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.status(200).json({
+      message: "Tarefa deletada com sucesso",
+    });
+  } catch (error) {
+    console.error("Erro ao deletar tarefa:", error);
+    res.status(500).json({
+      error: "Erro ao deletar tarefa",
+    });
+  }
+});
+
 export { tarefas };
