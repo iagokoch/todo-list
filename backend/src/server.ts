@@ -1,6 +1,7 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { tarefas } from "./routes/tarefas";
+import cors from "cors";
 
 // Cria uma instância da aplicação Express
 const app = express();
@@ -10,6 +11,8 @@ const prisma = new PrismaClient();
 app.use(express.json());
 
 app.use("/tarefas", tarefas);
+
+app.use(cors());
 
 // Rotas de autenticação
 

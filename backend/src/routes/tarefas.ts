@@ -1,11 +1,13 @@
 import { Response, Router, Request } from "express";
 import bodyParser from "body-parser";
 import { PrismaClient } from "@prisma/client";
+
 const tarefas = Router();
 tarefas.use(bodyParser.json());
 const prisma = new PrismaClient();
 
 tarefas.post("/", async (req: Request, res: Response) => {
+  console.log("POST recebido:", req.body);
   const { title, description } = req.body;
   try {
     const novaTrarefa = await prisma.task.create({
