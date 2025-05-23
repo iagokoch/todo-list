@@ -4,6 +4,7 @@ const taskList = document.getElementById("taskList");
 const taskForm = document.getElementById("taskForm");
 carregarTarefas();
 function carregarTarefas() {
+    taskList.innerHTML = "";
     fetch("http://localhost:3009/tarefas", {
         method: "GET",
         headers: {
