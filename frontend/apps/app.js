@@ -44,63 +44,23 @@ function carregarTarefas() {
 }
 taskForm.addEventListener("submit", (event) => {
     event.preventDefault(); // evita o recarregamento automatico da página ao enviar o formulário
-    const taskText = taskInput.value.trim(); // remove os espaços em branco do começo e do final da string
-    if (taskText !== "") {
-        //cria um novo li
-        const taskItem = document.createElement("li");
-        taskItem.classList.add("task-item");
-        //cria um checkbox
-        const checkbox = document.createElement("input");
-        checkbox.classList.add("checkbox");
-        checkbox.type = "checkbox";
-        checkbox.id = "checkbox";
-        checkbox.name = "checkbox";
-        checkbox.addEventListener("change", () => {
-            if (checkbox.checked) {
-                taskItem.style.textDecoration = "line-through";
-            }
-            else {
-                taskItem.style.textDecoration = "none";
-            }
-        });
-        //cria um span para o texto da tarefa
-        const span = document.createElement("span");
-        span.classList.add("task-text");
-        span.textContent = taskText;
-        //cria um botão de remover
-        const deleteButton = document.createElement("button");
-        deleteButton.classList.add("delete-button");
-        deleteButton.type = "button";
-        const icon = document.createElement("i");
-        icon.classList.add("fa-solid", "fa-trash");
-        deleteButton.appendChild(icon);
-        deleteButton.addEventListener("click", () => {
-            taskList.removeChild(taskItem);
-        });
-        //adiciona o checkbox, o span e o botão de remover ao li
-        taskItem.appendChild(checkbox);
-        taskItem.appendChild(span);
-        taskItem.appendChild(deleteButton);
-        //adiciona o li à lista de tarefas
-        taskList.appendChild(taskItem);
-        //limpa o input
-        taskInput.value = "";
-        fetch("http://localhost:3009/tarefas", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                title: taskText,
-                description: "",
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-            console.log("Tarefa criada com sucesso:", data);
-        })
-            .catch((error) => {
-            console.error("Erro ao criar a tarefa:", error);
-        });
-    }
+    const taskText = taskInput.value.trim(); // remove espaços em branco do começo e do final da string
+    fetch("http://localhost:3009/tarefas", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            title: taskText,
+            description: "",
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+        console.log("Tarefa criada com sucesso:", data);
+        carregarTarefas();
+    })
+        .catch((error) => {
+        console.error("Erro ao criar a tarefa:", error);
+    });
 });

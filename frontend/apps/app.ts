@@ -11,6 +11,7 @@ const taskForm = document.getElementById("taskForm") as HTMLFormElement;
 
 carregarTarefas();
 function carregarTarefas() {
+  taskList.innerHTML = "";
   fetch("http://localhost:3009/tarefas", {
     method: "GET",
     headers: {
@@ -18,7 +19,7 @@ function carregarTarefas() {
     },
   })
     .then((response) => response.json())
-    .then((data: Task[]) => {
+    .then((data) => {
       data.forEach((task: Task) => {
         const taskItem = document.createElement("li");
         taskItem.classList.add("task-item");
