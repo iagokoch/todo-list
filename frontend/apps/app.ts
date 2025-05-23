@@ -1,3 +1,10 @@
+interface Task {
+  id: number;
+  title: string;
+  description?: string;
+  completed: boolean;
+}
+
 const taskInput = document.getElementById("taskInput") as HTMLInputElement; // pega o input e transforma em um input HTML, HTMLInputElement Serve para o TypeScript saber que você está lidando com um <input> e liberar o uso correto das suas propriedades.
 const taskList = document.getElementById("taskList") as HTMLUListElement;
 const taskForm = document.getElementById("taskForm") as HTMLFormElement;
@@ -11,8 +18,8 @@ function carregarTarefas() {
     },
   })
     .then((response) => response.json())
-    .then((data) => {
-      data.forEach((task) => {
+    .then((data: Task[]) => {
+      data.forEach((task: Task) => {
         const taskItem = document.createElement("li");
         taskItem.classList.add("task-item");
         const checkbox = document.createElement("input");
@@ -24,7 +31,18 @@ function carregarTarefas() {
         checkbox.addEventListener("change", () => {
           if (checkbox.checked) {
             taskItem.style.textDecoration = "line-through";
-            fetch();
+            fetch(`http://localhost:3009/tarefas/${task.id}`),
+              {
+                method: "PATCH",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  completed: true,
+                }),
+              };
+          } else {
+            taskItem.style.textDecoration = "none";
           }
         });
       });
