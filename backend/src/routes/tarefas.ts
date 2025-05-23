@@ -5,10 +5,6 @@ const tarefas = Router();
 tarefas.use(bodyParser.json());
 const prisma = new PrismaClient();
 
-tarefas.get("/", (req: Request, res: Response) => {
-  return res.json("ok");
-});
-
 tarefas.post("/", async (req: Request, res: Response) => {
   const { title, description } = req.body;
   try {
@@ -28,8 +24,6 @@ tarefas.post("/", async (req: Request, res: Response) => {
     res.status(500).json({
       error: "Erro ao criar tarefa",
     });
-  } finally {
-    await prisma.$disconnect();
   }
 });
 
@@ -45,8 +39,6 @@ tarefas.get("/", async (req: Request, res: Response) => {
     res.status(500).json({
       error: "Erro ao buscar as tarefas",
     });
-  } finally {
-    await prisma.$disconnect();
   }
 });
 
