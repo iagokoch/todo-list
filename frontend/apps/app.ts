@@ -27,7 +27,7 @@ function carregarTarefas() {
         const checkbox = document.createElement("input");
         checkbox.classList.add("checkbox");
         checkbox.type = "checkbox";
-        checkbox.id = "checkbox";
+        checkbox.id = `task-${task.id}`;
         checkbox.name = "checkbox";
         checkbox.checked = task.completed;
 

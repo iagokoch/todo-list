@@ -10,9 +10,9 @@ const prisma = new PrismaClient();
 // Middleware para processar JSON
 app.use(express.json());
 
-app.use("/tarefas", tarefas);
-
 app.use(cors());
+
+app.use("/tarefas", tarefas);
 
 // Rotas de autenticação
 
