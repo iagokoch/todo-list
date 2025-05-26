@@ -1,49 +1,162 @@
 "use strict";
-const taskInput = document.getElementById("taskInput"); // pega o input e transforma em um input HTML, HTMLInputElement Serve para o TypeScript saber que você está lidando com um <input> e liberar o uso correto das suas propriedades.
-const taskList = document.getElementById("taskList");
-const taskForm = document.getElementById("taskForm");
-taskForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // evita o recarregamento automatico da página ao enviar o formulário
-    const taskText = taskInput.value.trim(); // remove os espaços em branco do começo e do final da string
-    if (taskText !== "") {
-        //cria um novo li
-        const taskItem = document.createElement("li");
-        taskItem.classList.add("task-item");
-        //cria um checkbox
-        const checkbox = document.createElement("input");
-        checkbox.classList.add("checkbox");
-        checkbox.type = "checkbox";
-        checkbox.id = "checkbox";
-        checkbox.name = "checkbox";
-        checkbox.addEventListener("change", () => {
-            if (checkbox.checked) {
-                taskItem.style.textDecoration = "line-through";
-            }
-            else {
-                taskItem.style.textDecoration = "none";
-            }
-        });
-        //cria um span para o texto da tarefa
-        const span = document.createElement("span");
-        span.classList.add("task-text");
-        span.textContent = taskText;
-        //cria um botão de remover
-        const deleteButton = document.createElement("button");
-        deleteButton.classList.add("delete-button");
-        deleteButton.type = "button";
-        const icon = document.createElement("i");
-        icon.classList.add("fa-solid", "fa-trash");
-        deleteButton.appendChild(icon);
-        deleteButton.addEventListener("click", () => {
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log(
+    ">>> DOMContentLoaded - O HTML está pronto. Iniciando o script..."
+  );
+  const taskInput = document.getElementById("taskInput");
+  const taskList = document.getElementById("taskList");
+  const taskForm = document.getElementById("taskForm");
+  if (!taskInput || !taskList || !taskForm) {
+    console.error(
+      "### ERRO CRÍTICO: Um ou mais elementos (taskInput, taskList, taskForm) não foram encontrados no HTML! ###"
+    );
+    return;
+  } else {
+    console.log(
+      ">>> Elementos HTML (taskInput, taskList, taskForm) encontrados com sucesso."
+    );
+  }
+
+  function adicionarTarefaAoDOM(task) {
+    console.log(`   -> Adicionando '${task.title}' ao DOM.`);
+    const taskItem = document.createElement("li");
+    taskItem.classList.add("task-item");
+    taskItem.dataset.taskId = task.id.toString();
+    const checkbox = document.createElement("input");
+    checkbox.classList.add("checkbox");
+    checkbox.type = "checkbox";
+    checkbox.id = `checkbox-${task.id}`;
+    checkbox.name = "checkbox";
+    checkbox.checked = task.completed;
+    if (task.completed) taskItem.style.textDecoration = "line-through";
+    const span = document.createElement("span");
+    span.classList.add("task-text");
+    span.textContent = task.title;
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete-button");
+    deleteButton.type = "button";
+    const icon = document.createElement("i");
+    icon.classList.add("fa-solid", "fa-trash");
+    deleteButton.appendChild(icon);
+    deleteButton.addEventListener("click", () => {
+      console.log(`   -> Evento CLICK no botão DELETAR (ID: ${task.id})`);
+      fetch(`http://localhost:3009/tarefas/${task.id}`, { method: "DELETE" })
+        .then((response) => {
+          if (response.ok) {
+            console.log(
+              `      -> Sucesso DELETE ID: ${task.id}. Removendo do DOM.`
+            );
             taskList.removeChild(taskItem);
+          } else {
+            console.error(
+              `      -> Falha DELETE ID: ${task.id}. Status: ${response.status}`
+            );
+          }
+        })
+        .catch((err) =>
+          console.error(`### ERRO FETCH DELETE (ID: ${task.id}):`, err)
+        );
+    });
+    checkbox.addEventListener("change", () => {
+      const isChecked = checkbox.checked;
+      console.log(
+        `   -> Evento CHANGE no checkbox (ID: ${task.id}). Marcado: ${isChecked}`
+      );
+      taskItem.style.textDecoration = isChecked ? "line-through" : "none";
+      fetch(`http://localhost:3009/tarefas/${task.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed: isChecked }),
+      })
+        .then((response) => {
+          if (!response.ok)
+            console.error(
+              `      -> Falha PATCH ID: ${task.id}. Status: ${response.status}`
+            );
+          else console.log(`      -> Sucesso PATCH ID: ${task.id}.`);
+        })
+        .catch((err) =>
+          console.error(`### ERRO FETCH PATCH (ID: ${task.id}):`, err)
+        );
+    });
+    taskItem.appendChild(checkbox);
+    taskItem.appendChild(span);
+    taskItem.appendChild(deleteButton);
+    taskList.appendChild(taskItem);
+  }
+  // FUNÇÃO PARA CARREGAR TAREFAS DO BACKEND
+  function carregarTarefas() {
+    console.log(">>> Chamando carregarTarefas()...");
+    taskList.innerHTML = "";
+    fetch("http://localhost:3009/tarefas", { method: "GET" })
+      .then((response) => {
+        console.log(
+          ">>> Resposta GET recebida:",
+          response.status,
+          response.statusText
+        );
+        if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        console.log(">>> Dados GET recebidos:", data);
+        if (data && data.tarefas && Array.isArray(data.tarefas)) {
+          data.tarefas.forEach((task) => {
+            adicionarTarefaAoDOM(task);
+          });
+          console.log(
+            `>>> ${data.tarefas.length} tarefas carregadas e renderizadas.`
+          );
+        } else {
+          console.warn(
+            ">>> Dados GET em formato inesperado ou sem tarefas:",
+            data
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("### ERRO CRÍTICO no FETCH GET:", error);
+      });
+  }
+
+  taskForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const taskText = taskInput.value.trim();
+    console.log(`>>> Evento SUBMIT. Texto: '${taskText}'`);
+    if (taskText !== "") {
+      console.log(`   -> Tentando FETCH POST para '${taskText}'...`);
+      fetch("http://localhost:3009/tarefas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: taskText,
+          description: "",
+          completed: false,
+        }),
+      })
+        .then((response) => {
+          console.log(
+            ">>> Resposta POST recebida:",
+            response.status,
+            response.statusText
+          );
+          if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+          return response.json();
+        })
+        .then((data) => {
+          console.log(">>> Sucesso POST. Resposta:", data);
+          taskInput.value = "";
+          console.log(">>> Recarregando tarefas após POST...");
+          carregarTarefas();
+        })
+        .catch((error) => {
+          console.error("### ERRO CRÍTICO no FETCH POST:", error);
         });
-        //adiciona o checkbox, o span e o botão de remover ao li
-        taskItem.appendChild(checkbox);
-        taskItem.appendChild(span);
-        taskItem.appendChild(deleteButton);
-        //adiciona o li à lista de tarefas
-        taskList.appendChild(taskItem);
-        //limpa o input
-        taskInput.value = "";
+    } else {
+      console.log(">>> Evento SUBMIT ignorado (texto vazio).");
     }
+  });
+
+  carregarTarefas();
 });
