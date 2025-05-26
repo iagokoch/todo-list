@@ -6,7 +6,7 @@ const tarefas = Router();
 tarefas.use(bodyParser.json());
 const prisma = new PrismaClient();
 
-tarefas.post("/", async (req: Request, res: Response) => {
+tarefas.post("/tarefas", async (req: Request, res: Response) => {
   console.log("POST recebido:", req.body);
   const { title, description } = req.body;
   try {
@@ -29,7 +29,7 @@ tarefas.post("/", async (req: Request, res: Response) => {
   }
 });
 
-tarefas.get("/", async (req: Request, res: Response) => {
+tarefas.get("/tarefas", async (req: Request, res: Response) => {
   try {
     const tarefas = await prisma.task.findMany();
     res.status(200).json({
@@ -44,7 +44,7 @@ tarefas.get("/", async (req: Request, res: Response) => {
   }
 });
 
-tarefas.patch("/:id", async (req: Request, res: Response) => {
+tarefas.patch("/tarefas:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   const { completed } = req.body;
 
@@ -69,7 +69,7 @@ tarefas.patch("/:id", async (req: Request, res: Response) => {
   }
 });
 
-tarefas.delete("/:id", async (req: Request, res: Response) => {
+tarefas.delete("/tarefas:id", async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
