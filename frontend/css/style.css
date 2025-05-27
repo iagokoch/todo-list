@@ -111,3 +111,11 @@ li {
 .btn-exclui-tudo:focus {
   outline: none;
 }
+
+.btn-exclui-tudo[disabled] {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  color: rgb(230, 21, 21);
+  transition: none;
+}

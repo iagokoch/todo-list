@@ -41,13 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (response.ok) {
                     console.log(`      -> Sucesso DELETE ID: ${task.id}. Removendo do DOM.`);
                     taskList.removeChild(taskItem);
+                    atualizaEstadoBtnExcluirTudo();
                 }
                 else {
                     console.error(`      -> Falha DELETE ID: ${task.id}. Status: ${response.status}`);
                 }
             })
                 .catch((err) => console.error(`### ERRO FETCH DELETE (ID: ${task.id}):`, err));
-            atualizaEstadoBtnExcluirTudo();
         });
         checkbox.addEventListener("change", () => {
             const isChecked = checkbox.checked;
