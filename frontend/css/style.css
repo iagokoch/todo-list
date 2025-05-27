@@ -88,3 +88,25 @@ li {
   max-width: 350px;
   overflow-wrap: break-word;
 }
+
+.btn-exclui-tudo {
+  width: 110px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 25px;
+  border-radius: 7px;
+  border: none;
+  background-color: red;
+  color: white;
+  transition: transform 0.5s ease-in-out;
+}
+
+.btn-exclui-tudo:hover {
+  background-color: rgb(209, 0, 0);
+  cursor: pointer;
+  font-size: 27px;
+  transform: scale(1.1);
+}
+.btn-exclui-tudo:focus {
+  outline: none;
+}
