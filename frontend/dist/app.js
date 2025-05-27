@@ -1,10 +1,10 @@
 "use strict";
-// app.ts - VERSÃO COM LOGS E CATCH
 document.addEventListener("DOMContentLoaded", () => {
     console.log(">>> DOMContentLoaded - O HTML está pronto. Iniciando o script...");
     const taskInput = document.getElementById("taskInput");
     const taskList = document.getElementById("taskList");
     const taskForm = document.getElementById("taskForm");
+    const excluirTudo = document.getElementById("excluir-tudo");
     if (!taskInput || !taskList || !taskForm) {
         console.error("### ERRO CRÍTICO: Um ou mais elementos (taskInput, taskList, taskForm) não foram encontrados no HTML! ###");
         return;
@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             })
                 .catch((err) => console.error(`### ERRO FETCH DELETE (ID: ${task.id}):`, err));
+            atualizaEstadoBtnExcluirTudo();
         });
         checkbox.addEventListener("change", () => {
             const isChecked = checkbox.checked;
@@ -70,6 +71,25 @@ document.addEventListener("DOMContentLoaded", () => {
         taskItem.appendChild(deleteButton);
         taskList.appendChild(taskItem);
     }
+    excluirTudo.addEventListener("click", () => {
+        const confirmacao = window.confirm("Você tem certeza que deseja excluir todas as tarefas?");
+        if (confirmacao) {
+            fetch("http://localhost:3009/tarefas", { method: "DELETE" })
+                .then((response) => {
+                if (response.ok) {
+                    console.log(" TAREFAS EXCLUIDAS COM SUCESSO");
+                    carregarTarefas();
+                }
+                else {
+                    console.error("ERRO AO EXCLUIR TAREFAS");
+                }
+            })
+                .catch((error) => console.error("EERO no fetch DELETE:", error));
+        }
+        else {
+            console.log("Usuário cancelou.");
+        }
+    });
     function carregarTarefas() {
         console.log(">>> Chamando carregarTarefas()...");
         taskList.innerHTML = "";
@@ -91,9 +111,11 @@ document.addEventListener("DOMContentLoaded", () => {
             else {
                 console.warn(">>> Dados GET em formato inesperado ou sem tarefas:", data);
             }
+            atualizaEstadoBtnExcluirTudo();
         })
             .catch((error) => {
             console.error("### ERRO CRÍTICO no FETCH GET:", error);
+            atualizaEstadoBtnExcluirTudo();
         });
     }
     taskForm.addEventListener("submit", (event) => {
@@ -131,5 +153,10 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(">>> Evento SUBMIT ignorado (texto vazio).");
         }
     });
+    function atualizaEstadoBtnExcluirTudo() {
+        const hasTasks = taskList.children.length > 0;
+        excluirTudo.disabled = !hasTasks;
+        console.log(`>>> Botão "Excluir Tudo" ${hasTasks ? "habilitado" : "desabilitado"}.`);
+    }
     carregarTarefas();
 });

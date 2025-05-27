@@ -89,4 +89,18 @@ tarefas.delete("/:id", async (req: Request, res: Response) => {
   }
 });
 
+tarefas.delete("/", async (req: Request, res: Response) => {
+  try {
+    await prisma.task.deleteMany();
+    res.status(200).json({
+      message: "Tarefas deletadas com sucesso",
+    });
+  } catch (error) {
+    console.error("Erro ao deletar tarefas:", error);
+    res.status(500).json({
+      error: "Erro ao deletar tarefas",
+    });
+  }
+});
+
 export { tarefas };
