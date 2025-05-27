@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
               `      -> Sucesso DELETE ID: ${task.id}. Removendo do DOM.`
             );
             taskList.removeChild(taskItem);
+            atualizaEstadoBtnExcluirTudo();
           } else {
             console.error(
               `      -> Falha DELETE ID: ${task.id}. Status: ${response.status}`
@@ -71,8 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch((err) =>
           console.error(`### ERRO FETCH DELETE (ID: ${task.id}):`, err)
         );
-
-      atualizaEstadoBtnExcluirTudo();
     });
 
     checkbox.addEventListener("change", () => {
